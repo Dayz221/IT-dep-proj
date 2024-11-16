@@ -6,5 +6,9 @@ type User struct {
 	ID       primitive.ObjectID   `bson:"_id,omitempty"`
 	ChatId   int64                `bson:"chat_id"`
 	Username string               `bson:"username"`
-	Groups   []primitive.ObjectID `bson:"groups,omitempty"`
+	Groups   []primitive.ObjectID `bson:"groups"`
+}
+
+func NewUser() User {
+	return User{ChatId: 0, Username: "", Groups: []primitive.ObjectID{}}
 }

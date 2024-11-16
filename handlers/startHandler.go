@@ -14,26 +14,28 @@ import (
 func StartHandler(bot *telego.Bot, message telego.Message) {
 	users := mongodb.GetUserCollection()
 
+	var candidate models.User
 	filter := bson.D{{Key: "chat_id", Value: message.Chat.ID}}
-	err := users.FindOne(context.Background(), filter).Decode(nil)
+	err := users.FindOne(context.Background(), filter).Decode(&candidate)
 
 	if err != nil {
 		if err != mongo.ErrNoDocuments {
+			log.Printf("Ошибка в handler /start: %s\n", err)
 			return
+		}
+
+		newUser := models.NewUser()
+		newUser.ChatId = message.Chat.ID
+		newUser.Username = message.From.Username
+
+		_, err = users.InsertOne(
+			context.Background(),
+			newUser,
+		)
+
+		if err != nil {
+			log.Printf("Ошибка в handler /start: %s\n", err)
 		}
 	}
 
-	newUser := models.User{
-		Username: message.From.Username,
-		ChatId:   message.Chat.ID,
-	}
-
-	_, err = users.InsertOne(
-		context.Background(),
-		newUser,
-	)
-
-	if err != nil {
-		log.Printf("Ошибка в handler /start: %s", err)
-	}
 }
