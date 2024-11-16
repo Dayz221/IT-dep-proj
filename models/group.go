@@ -8,3 +8,7 @@ type Group struct {
 	Admins []primitive.ObjectID `bson:"admins"`
 	Tasks  []primitive.ObjectID `bson:"tasks"`
 }
+
+func NewGroup() Group {
+	return Group{Users: []primitive.ObjectID{}, Admins: []primitive.ObjectID{}, Tasks: []primitive.ObjectID{}}
+}
