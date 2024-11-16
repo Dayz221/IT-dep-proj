@@ -25,8 +25,8 @@ func StartHandler(bot *telego.Bot, message telego.Message) {
 		}
 
 		newUser := models.NewUser()
-		newUser.ChatId = message.Chat.ID
 		newUser.Username = message.From.Username
+		newUser.UserId = message.From.ID
 
 		_, err = users.InsertOne(
 			context.Background(),

@@ -4,11 +4,11 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type User struct {
 	ID       primitive.ObjectID   `bson:"_id,omitempty"`
-	ChatId   int64                `bson:"chat_id"`
+	UserId   int64                `bson:"user_id"`
 	Username string               `bson:"username"`
 	Groups   []primitive.ObjectID `bson:"groups"`
 }
 
 func NewUser() User {
-	return User{ChatId: 0, Username: "", Groups: []primitive.ObjectID{}}
+	return User{UserId: 0, Username: "", Groups: []primitive.ObjectID{}}
 }
