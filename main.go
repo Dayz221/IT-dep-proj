@@ -40,6 +40,11 @@ func main() {
 	defer bh.Stop()
 
 	bh.HandleMessage(handlers.StartHandler, th.CommandEqual("start"))
+	bh.HandleMessage(handlers.FunctionsHandler, th.CommandEqual("functions"))
+
+	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.CallbackDataPrefix("createGroup"))
+	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.CallbackDataPrefix("showGroups"))
+	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.CallbackDataPrefix("showAllTasks"))
 
 	bh.Start()
 }

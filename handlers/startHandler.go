@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"context"
+	"itproj/keyboards"
 	"itproj/models"
 	"itproj/mongodb"
 	"log"
 
 	"github.com/mymmrac/telego"
+	tu "github.com/mymmrac/telego/telegoutil"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -38,4 +40,12 @@ func StartHandler(bot *telego.Bot, message telego.Message) {
 		}
 	}
 
+	bot.SendMessage(
+		tu.Message(
+			message.Chat.ChatID(),
+			"Бу! Испугался? Не бойся! Я бот от команды Pupupu!\n"+
+				"Я помогу с оптимизацией задач для твоей группы.\n"+
+				"Давай создавать задачи, пока мы не устанем!\n",
+		).WithReplyMarkup(keyboards.StartInlineKeyboard),
+	)
 }
