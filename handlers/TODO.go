@@ -1,5 +1,7 @@
 package handlers
 
+// Хэндленры затычки
+
 import (
 	"log"
 

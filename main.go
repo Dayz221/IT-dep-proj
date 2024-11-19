@@ -33,6 +33,9 @@ func main() {
 		log.Fatalf("Ошибка при инициализации бота: %s", err)
 	}
 
+	me, _ := bot.GetMe()
+	log.Println(me.Username)
+
 	updates, _ := bot.UpdatesViaLongPolling(nil)
 	defer bot.StopLongPolling()
 
@@ -43,8 +46,8 @@ func main() {
 	bh.HandleMessage(handlers.FunctionsHandler, th.CommandEqual("functions"))
 
 	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.CallbackDataPrefix("createGroup"))
-	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.CallbackDataPrefix("showGroups"))
-	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.CallbackDataPrefix("showAllTasks"))
+
+	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.CallbackDataPrefix("createTask"))
 
 	bh.Start()
 }

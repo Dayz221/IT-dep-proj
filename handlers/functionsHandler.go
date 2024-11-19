@@ -11,7 +11,7 @@ func FunctionsHandler(bot *telego.Bot, message telego.Message) {
 	bot.SendMessage(
 		tu.Message(
 			message.Chat.ChatID(),
-			"Что ты хочешь сделать? 🥺\nВот, что я умею 👉👈:",
+			"Что ты хочешь сделать? 🥺\nВот, что я умею:",
 		).WithReplyMarkup(keyboards.FunctionsInlineKeyboard),
 	)
 }

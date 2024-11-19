@@ -6,6 +6,6 @@ import (
 
 var StartInlineKeyboard = tu.InlineKeyboard(
 	tu.InlineKeyboardRow(
-		tu.InlineKeyboardButton("Создать новую группу").WithCallbackData("createGroup"),
+		tu.InlineKeyboardButton("Создать группу").WithCallbackData("createGroup"),
 	),
 )
