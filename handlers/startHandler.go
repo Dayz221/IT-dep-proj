@@ -43,7 +43,7 @@ func StartHandler(bot *telego.Bot, message telego.Message) {
 	users := mongodb.GetUserCollection()
 
 	var candidate models.User
-	filter := bson.D{{Key: "chat_id", Value: message.Chat.ID}}
+	filter := bson.D{{Key: "user_id", Value: message.Chat.ID}}
 	err := users.FindOne(context.Background(), filter).Decode(&candidate)
 
 	if err != nil {
