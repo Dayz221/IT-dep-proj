@@ -6,6 +6,7 @@ import (
 	"itproj/mongodb"
 	"log"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/mymmrac/telego"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -18,13 +19,14 @@ func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
 	groups := mongodb.GetGroupCollection()
 
 	name := strings.Trim(message.Text, " ")
-	if len(name) <= 3 {
+	if utf8.RuneCountInString(name) <= 3 {
 		bot.SendMessage(
 			tu.Message(
 				message.Chat.ChatID(),
-				"Имя группы должно быть больше 3 символов",
+				"Имя группы должно быть больше 3 символов.\nВведи другое название:",
 			),
 		)
+		return
 	}
 
 	user, err := models.GetUserById(message.From.ID)

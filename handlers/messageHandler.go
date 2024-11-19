@@ -18,12 +18,12 @@ func MessageHandler(bot *telego.Bot, message telego.Message) {
 
 	if user.CurState == 1 {
 		EnterGroupNameHandler(bot, message)
+	} else {
+		bot.SendMessage(
+			tu.Message(
+				message.Chat.ChatID(),
+				"Я тебя не понимаю 😐",
+			),
+		)
 	}
-
-	bot.SendMessage(
-		tu.Message(
-			message.Chat.ChatID(),
-			"Я тебя не понимаю 😐",
-		),
-	)
 }
