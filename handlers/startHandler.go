@@ -11,6 +11,7 @@ import (
 	"github.com/mymmrac/telego"
 	tu "github.com/mymmrac/telego/telegoutil"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -26,15 +27,63 @@ func defaultHandler(bot *telego.Bot, message telego.Message) {
 	)
 }
 
-func inviteHandler(bot *telego.Bot, message telego.Message, groupId string) {
-	log.Println("/invite handler to group: " + groupId)
+func inviteHandler(bot *telego.Bot, message telego.Message, groupIdHex string) {
+	log.Println("/invite handler to group: " + groupIdHex)
 
-	// TODO: сделать вход в гуппу
+	groupCollection := mongodb.GetGroupCollection()
+	userCollection := mongodb.GetUserCollection()
+
+	var group models.Group
+	groupId, err := primitive.ObjectIDFromHex(groupIdHex)
+	if err != nil {
+		log.Printf("Ошибка в inviteHandler: %s\n", err)
+		return
+	}
+
+	err = groupCollection.FindOne(context.Background(), bson.D{{Key: "_id", Value: groupId}}).Decode(&group)
+	if err != nil {
+		log.Printf("Ошибка в inviteHandler: %s\n", err)
+		return
+	}
+
+	user, err := models.GetUserById(message.From.ID)
+	if err != nil {
+		log.Printf("Ошибка в inviteHandler: %s\n", err)
+		return
+	}
+
+	for _, el := range group.Users {
+		if el == user.ID {
+			bot.SendMessage(
+				tu.Message(
+					message.Chat.ChatID(),
+					"Ты уже состоишь в группе \""+group.Name+"\"!",
+				),
+			)
+			return
+		}
+	}
+
+	_, err = groupCollection.UpdateByID(context.Background(), groupId, bson.M{
+		"$push": bson.M{"users": user.ID},
+	})
+	if err != nil {
+		log.Printf("Ошибка в inviteHandler: %s\n", err)
+		return
+	}
+
+	_, err = userCollection.UpdateByID(context.Background(), user.ID, bson.M{
+		"$push": bson.M{"groups": groupId},
+	})
+	if err != nil {
+		log.Printf("Ошибка в inviteHandler: %s\n", err)
+		return
+	}
 
 	bot.SendMessage(
 		tu.Message(
 			message.Chat.ChatID(),
-			"Ты вступил в группу TODO!\n",
+			"Ты успешно вступил в группу \""+group.Name+"\"!",
 		),
 	)
 }
@@ -48,7 +97,7 @@ func StartHandler(bot *telego.Bot, message telego.Message) {
 
 	if err != nil {
 		if err != mongo.ErrNoDocuments {
-			log.Printf("Ошибка в handler /start: %s\n", err)
+			log.Printf("Ошибка в StartHandler: %s\n", err)
 			return
 		}
 
@@ -62,7 +111,8 @@ func StartHandler(bot *telego.Bot, message telego.Message) {
 		)
 
 		if err != nil {
-			log.Printf("Ошибка в handler /start: %s\n", err)
+			log.Printf("Ошибка в StartHandler: %s\n", err)
+			return
 		}
 	}
 

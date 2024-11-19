@@ -14,6 +14,30 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func CreateGroupHandler(bot *telego.Bot, query telego.CallbackQuery) {
+	users := mongodb.GetUserCollection()
+	user, err := models.GetUserById(query.From.ID)
+	if err != nil {
+		log.Printf("Ошибка в EnterGroupNameHandler: %s\n", err)
+		return
+	}
+	_, err = users.UpdateByID(context.Background(), user.ID, bson.D{{
+		Key:   "$set",
+		Value: bson.D{{Key: "cur_state", Value: 1}},
+	}})
+	if err != nil {
+		log.Printf("Ошибка в CreateGroupHandler: %s\n", err)
+		return
+	}
+
+	bot.SendMessage(
+		tu.Message(
+			tu.ID(query.Message.GetChat().ID),
+			"Введи имя новой группы. Имя должно быть больше 3 символов:",
+		),
+	)
+}
+
 func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
 	users := mongodb.GetUserCollection()
 	groups := mongodb.GetGroupCollection()
@@ -45,6 +69,7 @@ func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
 	}
 
 	newGroup := models.Group{
+		ID:     primitive.NewObjectID(),
 		Name:   name,
 		Admins: []primitive.ObjectID{user.ID},
 		Users:  []primitive.ObjectID{user.ID},
@@ -56,34 +81,17 @@ func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
 		return
 	}
 
-	bot.SendMessage(
+	me, _ := bot.GetMe()
+
+	_, err = bot.SendMessage(
 		tu.Message(
 			message.Chat.ChatID(),
-			"Группа \""+name+"\" успешно создана!",
-		),
+			"Группа \""+name+"\" успешно создана\\!\n"+
+				"Ты можешь пригласить команду по [ссылке](https://t.me/"+me.Username+"?start=invite="+newGroup.ID.Hex()+")\\.",
+		).WithParseMode(telego.ModeMarkdownV2),
 	)
-}
 
-func CreateGroupHandler(bot *telego.Bot, query telego.CallbackQuery) {
-	users := mongodb.GetUserCollection()
-	user, err := models.GetUserById(query.From.ID)
 	if err != nil {
 		log.Printf("Ошибка в EnterGroupNameHandler: %s\n", err)
-		return
 	}
-	_, err = users.UpdateByID(context.Background(), user.ID, bson.D{{
-		Key:   "$set",
-		Value: bson.D{{Key: "cur_state", Value: 1}},
-	}})
-	if err != nil {
-		log.Printf("Ошибка в CreateGroupHandler: %s\n", err)
-		return
-	}
-
-	bot.SendMessage(
-		tu.Message(
-			tu.ID(query.Message.GetChat().ID),
-			"Введите имя новой группы",
-		),
-	)
 }

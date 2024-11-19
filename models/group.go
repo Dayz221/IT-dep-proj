@@ -11,5 +11,5 @@ type Group struct {
 }
 
 func NewGroup() Group {
-	return Group{Name: "", Users: []primitive.ObjectID{}, Admins: []primitive.ObjectID{}, Tasks: []primitive.ObjectID{}}
+	return Group{ID: primitive.NewObjectID(), Name: "", Users: []primitive.ObjectID{}, Admins: []primitive.ObjectID{}, Tasks: []primitive.ObjectID{}}
 }
