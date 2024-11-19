@@ -10,6 +10,7 @@ import (
 	"github.com/mymmrac/telego"
 	tu "github.com/mymmrac/telego/telegoutil"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
@@ -41,10 +42,11 @@ func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
 		return
 	}
 
-	newGroup := models.NewGroup()
-	newGroup.Name = name
-	newGroup.Admins = append(newGroup.Admins, user.ID)
-	newGroup.Users = append(newGroup.Users, user.ID)
+	newGroup := models.Group{
+		Name:   name,
+		Admins: []primitive.ObjectID{user.ID},
+		Users:  []primitive.ObjectID{user.ID},
+	}
 
 	_, err = groups.InsertOne(context.Background(), newGroup)
 	if err != nil {
