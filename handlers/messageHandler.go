@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/mymmrac/telego"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 func MessageHandler(bot *telego.Bot, message telego.Message) {
@@ -18,4 +19,11 @@ func MessageHandler(bot *telego.Bot, message telego.Message) {
 	if user.CurState == 1 {
 		EnterGroupNameHandler(bot, message)
 	}
+
+	bot.SendMessage(
+		tu.Message(
+			message.Chat.ChatID(),
+			"Я тебя не понимаю 😐",
+		),
+	)
 }
