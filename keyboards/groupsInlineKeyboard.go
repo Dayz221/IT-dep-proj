@@ -17,5 +17,7 @@ func CreateGroupsInlineKeyboard(lst []models.Group, prefix string) *telego.Inlin
 		)
 	}
 
-	return tu.InlineKeyboardGrid(tu.InlineKeyboardCols(2, btns...))
+	return tu.InlineKeyboardGrid(
+		tu.InlineKeyboardCols(2, btns...),
+	)
 }

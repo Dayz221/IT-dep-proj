@@ -15,3 +15,12 @@ func FunctionsHandler(bot *telego.Bot, message telego.Message) {
 		).WithReplyMarkup(keyboards.FunctionsInlineKeyboard),
 	)
 }
+
+func BackToFunctionsHandler(bot *telego.Bot, query telego.CallbackQuery) {
+	bot.EditMessageText(&telego.EditMessageTextParams{
+		ChatID:      tu.ID(query.Message.GetChat().ID),
+		MessageID:   query.Message.GetMessageID(),
+		Text:        "Что ты хочешь сделать? 🥺\nВот, что я умею:",
+		ReplyMarkup: keyboards.FunctionsInlineKeyboard,
+	})
+}

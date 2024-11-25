@@ -38,7 +38,7 @@ func CreateGroupHandler(bot *telego.Bot, query telego.CallbackQuery) {
 			tu.InlineKeyboard(
 				[]telego.InlineKeyboardButton{
 					tu.InlineKeyboardButton(
-						"Отмена",
+						"❌ Отмена",
 					).WithCallbackData("cancel"),
 				},
 			),

@@ -46,6 +46,7 @@ func main() {
 	bh.HandleMessage(handlers.FunctionsHandler, th.CommandEqual("functions"))
 
 	bh.HandleCallbackQuery(handlers.CancelHandler, th.CallbackDataEqual("cancel"))
+	bh.HandleCallbackQuery(handlers.BackToFunctionsHandler, th.CallbackDataEqual("backToFunctions"))
 
 	bh.HandleCallbackQuery(handlers.CreateGroupHandler, th.CallbackDataPrefix("createGroup"))
 	bh.HandleCallbackQuery(handlers.ShowGroupsHandler, th.CallbackDataPrefix("showGroups"))

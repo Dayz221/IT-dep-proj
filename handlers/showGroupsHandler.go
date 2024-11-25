@@ -8,18 +8,21 @@ import (
 )
 
 func ShowGroupsHandler(bot *telego.Bot, query telego.CallbackQuery) {
-	bot.DeleteMessage(&telego.DeleteMessageParams{
-		ChatID:    tu.ID(query.Message.GetChat().ID),
-		MessageID: query.Message.GetMessageID(),
-	})
+	keyboard := keyboards.CreateGroupsInlineKeyboard(
+		GetListOfGroups(bot, query),
+		"groupClick",
+	)
 
-	bot.SendMessage(&telego.SendMessageParams{
-		ChatID: tu.ID(query.Message.GetChat().ID),
-		Text:   "Вот твои группы, кусок говна ❤️:",
-		ReplyMarkup: keyboards.CreateGroupsInlineKeyboard(
-			GetListOfGroups(bot, query),
-			"groupClick",
-		),
+	keyboards.WithButton(
+		keyboard,
+		tu.InlineKeyboardButton("◀️ Назад").WithCallbackData("backToFunctions"),
+	)
+
+	bot.EditMessageText(&telego.EditMessageTextParams{
+		ChatID:      tu.ID(query.Message.GetChat().ID),
+		MessageID:   query.Message.GetMessageID(),
+		Text:        "Вот твои группы, кусок говна ❤️:",
+		ReplyMarkup: keyboard,
 	})
 
 	bot.AnswerCallbackQuery(&telego.AnswerCallbackQueryParams{
