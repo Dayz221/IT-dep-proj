@@ -34,8 +34,20 @@ func CreateGroupHandler(bot *telego.Bot, query telego.CallbackQuery) {
 		tu.Message(
 			tu.ID(query.Message.GetChat().ID),
 			"Введи имя новой группы. Имя должно быть больше 3 символов:",
+		).WithReplyMarkup(
+			tu.InlineKeyboard(
+				[]telego.InlineKeyboardButton{
+					tu.InlineKeyboardButton(
+						"Отмена",
+					).WithCallbackData("cancel"),
+				},
+			),
 		),
 	)
+
+	bot.AnswerCallbackQuery(&telego.AnswerCallbackQueryParams{
+		CallbackQueryID: query.ID,
+	})
 }
 
 func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
@@ -59,20 +71,23 @@ func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
 		return
 	}
 
-	_, err = users.UpdateByID(context.Background(), user.ID, bson.D{{
-		Key:   "$set",
-		Value: bson.D{{Key: "cur_state", Value: 0}},
-	}})
-	if err != nil {
-		log.Printf("Ошибка в EnterGroupNameHandler: %s\n", err)
-		return
-	}
-
 	newGroup := models.Group{
 		ID:     primitive.NewObjectID(),
 		Name:   name,
 		Admins: []primitive.ObjectID{user.ID},
 		Users:  []primitive.ObjectID{user.ID},
+	}
+
+	_, err = users.UpdateByID(context.Background(), user.ID, bson.D{{
+		Key:   "$set",
+		Value: bson.D{{Key: "cur_state", Value: 0}},
+	}, {
+		Key:   "$push",
+		Value: bson.D{{Key: "groups", Value: newGroup.ID}},
+	}})
+	if err != nil {
+		log.Printf("Ошибка в EnterGroupNameHandler: %s\n", err)
+		return
 	}
 
 	_, err = groups.InsertOne(context.Background(), newGroup)
