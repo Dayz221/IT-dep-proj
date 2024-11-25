@@ -10,7 +10,7 @@ import (
 func ShowGroupsHandler(bot *telego.Bot, query telego.CallbackQuery) {
 	keyboard := keyboards.CreateGroupsInlineKeyboard(
 		GetListOfGroups(bot, query),
-		"groupClick",
+		"showGroup",
 	)
 
 	keyboards.WithButton(
