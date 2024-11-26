@@ -13,4 +13,7 @@ var FunctionsInlineKeyboard = tu.InlineKeyboard(
 		tu.InlineKeyboardButton("Показать все мои задания").WithCallbackData("showAllTasks"),
 		tu.InlineKeyboardButton("Выдать таску").WithCallbackData("createTask"),
 	),
+	tu.InlineKeyboardRow(
+		tu.InlineKeyboardButton("Поднять мотивацию ⬆️⬆️⬆️").WithCallbackData("getMotivation"),
+	),
 )

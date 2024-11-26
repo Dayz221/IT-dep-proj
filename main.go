@@ -51,11 +51,16 @@ func main() {
 	bh.HandleCallbackQuery(handlers.CreateGroupHandler, th.CallbackDataPrefix("createGroup"))
 	bh.HandleCallbackQuery(handlers.ShowGroupsHandler, th.CallbackDataPrefix("showGroups"))
 	bh.HandleCallbackQuery(handlers.ShowGroupInfoHandler, th.CallbackDataPrefix("showGroup"))
+	bh.HandleCallbackQuery(handlers.ShowGroupUsersHandler, th.CallbackDataPrefix("showUsers"))
+	bh.HandleCallbackQuery(handlers.ShowGroupAdminsHandler, th.CallbackDataPrefix("showAdmins"))
+
+	bh.HandleCallbackQuery(handlers.InviteUserHandler, th.CallbackDataPrefix("inviteUser"))
 
 	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.CallbackDataPrefix("createTask"))
 
-	bh.HandleMessage(handlers.MessageHandler, th.AnyMessageWithText())
+	bh.HandleCallbackQuery(handlers.GET_MOTIVATION, th.CallbackDataPrefix("getMotivation"))
 
+	bh.HandleMessage(handlers.MessageHandler, th.AnyMessageWithText())
 	bh.HandleCallbackQuery(handlers.TODO_CALLBACK, th.AnyCallbackQuery())
 
 	bh.Start()

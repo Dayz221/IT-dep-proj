@@ -21,6 +21,10 @@ func CreateGroupInfoKeyboard(groupId primitive.ObjectID) *telego.InlineKeyboardM
 			tu.InlineKeyboardButton("Удалить").WithCallbackData("deleteGroup&"+groupId.Hex()),
 		),
 		tu.InlineKeyboardRow(
+			tu.InlineKeyboardButton("Пригласить пользователя").WithCallbackData("inviteUser&"+groupId.Hex()),
+			// tu.InlineKeyboardButton("").WithCallbackData("showAdmins&"+groupId.Hex()),
+		),
+		tu.InlineKeyboardRow(
 			tu.InlineKeyboardButton("◀️ Назад").WithCallbackData("showGroups"),
 		),
 	)

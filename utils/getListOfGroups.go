@@ -1,4 +1,4 @@
-package handlers
+package utils
 
 import (
 	"context"
@@ -6,14 +6,13 @@ import (
 	"itproj/mongodb"
 	"log"
 
-	"github.com/mymmrac/telego"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GetListOfGroups(bot *telego.Bot, query telego.CallbackQuery) []models.Group {
-	user, err := models.GetUserById(query.From.ID)
+func GetListOfGroups(userId int64) []models.Group {
+	user, err := models.GetUserById(userId)
 	if err != nil {
-		log.Printf("Че та наебнулось к чертям в createTask %s\n", err)
+		log.Printf("Че та наебнулось к чертям в GetListOfGroups %s\n", err)
 		return []models.Group{}
 	}
 	purirum := make([]models.Group, 0, 5)
@@ -29,9 +28,9 @@ func GetListOfGroups(bot *telego.Bot, query telego.CallbackQuery) []models.Group
 	return purirum
 }
 
-func GetListOfGroupsWithAdmin(bot *telego.Bot, query telego.CallbackQuery) []models.Group {
-	listOfGroups := GetListOfGroups(bot, query)
-	user, err := models.GetUserById(query.From.ID)
+func GetListOfGroupsWithAdmin(userId int64) []models.Group {
+	listOfGroups := GetListOfGroups(userId)
+	user, err := models.GetUserById(userId)
 	if err != nil {
 		log.Printf("Проеб в GetListOfGroupsWithAdmin %s\n ", err)
 		return []models.Group{}

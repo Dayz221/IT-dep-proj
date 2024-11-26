@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"itproj/keyboards"
+	"itproj/utils"
 
 	"github.com/mymmrac/telego"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -9,7 +10,7 @@ import (
 
 func ShowGroupsHandler(bot *telego.Bot, query telego.CallbackQuery) {
 	keyboard := keyboards.CreateGroupsInlineKeyboard(
-		GetListOfGroups(bot, query),
+		utils.GetListOfGroups(query.From.ID),
 		"showGroup",
 	)
 
