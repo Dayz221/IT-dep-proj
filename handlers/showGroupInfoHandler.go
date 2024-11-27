@@ -17,10 +17,21 @@ func ShowGroupInfoHandler(bot *telego.Bot, query telego.CallbackQuery) {
 		return
 	}
 
+	user, err := utils.GetUserByTgId(query.From.ID)
+	if err != nil {
+		fmt.Printf("Что-то наебнулось в ShowGroupInfoHandler: %s\n", err)
+		return
+	}
+
+	keyboard := keyboards.CreateGroupInfoKeyboard(group.ID)
+	if !utils.CheckAdmin(strings.Split(query.Data, "&")[1], user.ID.Hex()) {
+		keyboard = keyboards.CreateGroupInfoKeyboardForUser(group.ID, user.ID)
+	}
+
 	bot.EditMessageText(&telego.EditMessageTextParams{
 		ChatID:      tu.ID(query.Message.GetChat().ID),
 		MessageID:   query.Message.GetMessageID(),
 		Text:        "Действия с группой \"" + group.Name + "\":",
-		ReplyMarkup: keyboards.CreateGroupInfoKeyboard(group.ID),
+		ReplyMarkup: keyboard,
 	})
 }

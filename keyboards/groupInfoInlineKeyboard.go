@@ -29,3 +29,15 @@ func CreateGroupInfoKeyboard(groupId primitive.ObjectID) *telego.InlineKeyboardM
 		),
 	)
 }
+
+func CreateGroupInfoKeyboardForUser(groupId primitive.ObjectID, userId primitive.ObjectID) *telego.InlineKeyboardMarkup {
+	return tu.InlineKeyboard(
+		tu.InlineKeyboardRow(
+			tu.InlineKeyboardButton("Мои задачи").WithCallbackData("showTasks&"+groupId.Hex()+"&"+userId.Hex()),
+			tu.InlineKeyboardButton("Покинуть группу").WithCallbackData("leaveGroup&"+groupId.Hex()+"&"+userId.Hex()),
+		),
+		tu.InlineKeyboardRow(
+			tu.InlineKeyboardButton("◀️ Назад").WithCallbackData("showGroups"),
+		),
+	)
+}
