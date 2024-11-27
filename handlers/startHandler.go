@@ -5,6 +5,7 @@ import (
 	"itproj/keyboards"
 	"itproj/models"
 	"itproj/mongodb"
+	"itproj/utils"
 	"log"
 	"strings"
 
@@ -46,7 +47,7 @@ func inviteHandler(bot *telego.Bot, message telego.Message, groupIdHex string) {
 		return
 	}
 
-	user, err := models.GetUserById(message.From.ID)
+	user, err := utils.GetUserByTgId(message.From.ID)
 	if err != nil {
 		log.Printf("Ошибка в inviteHandler: %s\n", err)
 		return

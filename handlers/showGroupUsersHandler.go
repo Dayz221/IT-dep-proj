@@ -20,7 +20,7 @@ func ShowGroupUsersHandler(bot *telego.Bot, query telego.CallbackQuery) {
 
 	keyboard := keyboards.CreateUsersInlineKeyboard(
 		utils.GetListOfUsers(groupId),
-		"showUserInfo",
+		"showUserInfo&"+groupId,
 	)
 
 	keyboards.WithButton(
@@ -50,7 +50,7 @@ func ShowGroupAdminsHandler(bot *telego.Bot, query telego.CallbackQuery) {
 
 	keyboard := keyboards.CreateUsersInlineKeyboard(
 		utils.GetListOfAdmins(groupId),
-		"showAdminInfo",
+		"showAdminInfo&"+groupId,
 	)
 
 	keyboards.WithButton(

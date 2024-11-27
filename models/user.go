@@ -1,10 +1,6 @@
 package models
 
 import (
-	"context"
-	"itproj/mongodb"
-
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -25,18 +21,4 @@ func NewUser() User {
 		CurState:  0,
 		TaskState: NewTaskState(),
 	}
-}
-
-func GetUserById(tgId int64) (*User, error) {
-	userCollection := mongodb.GetUserCollection()
-
-	var user User
-	filter := bson.D{{Key: "user_id", Value: tgId}}
-	err := userCollection.FindOne(context.Background(), filter).Decode(&user)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
 }

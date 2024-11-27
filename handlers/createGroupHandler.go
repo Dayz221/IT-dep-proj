@@ -4,6 +4,7 @@ import (
 	"context"
 	"itproj/models"
 	"itproj/mongodb"
+	"itproj/utils"
 	"log"
 	"strings"
 	"unicode/utf8"
@@ -16,7 +17,7 @@ import (
 
 func CreateGroupHandler(bot *telego.Bot, query telego.CallbackQuery) {
 	users := mongodb.GetUserCollection()
-	user, err := models.GetUserById(query.From.ID)
+	user, err := utils.GetUserByTgId(query.From.ID)
 	if err != nil {
 		log.Printf("Ошибка в EnterGroupNameHandler: %s\n", err)
 		return
@@ -65,7 +66,7 @@ func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
 		return
 	}
 
-	user, err := models.GetUserById(message.From.ID)
+	user, err := utils.GetUserByTgId(message.From.ID)
 	if err != nil {
 		log.Printf("Ошибка в EnterGroupNameHandler: %s\n", err)
 		return
@@ -102,7 +103,7 @@ func EnterGroupNameHandler(bot *telego.Bot, message telego.Message) {
 		tu.Message(
 			message.Chat.ChatID(),
 			"Группа \""+name+"\" успешно создана\\!\n"+
-				"Ты можешь пригласить команду по [ссылке](https://t.me/"+me.Username+"?start=invite="+newGroup.ID.Hex()+")\\.",
+				"Ты можешь пригласить команду по ссылке:\n`https://t.me/"+me.Username+"?start=invite="+newGroup.ID.Hex()+"`",
 		).WithParseMode(telego.ModeMarkdownV2),
 	)
 

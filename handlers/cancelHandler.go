@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"context"
-	"itproj/models"
 	"itproj/mongodb"
+	"itproj/utils"
 	"log"
 
 	"github.com/mymmrac/telego"
@@ -13,7 +13,7 @@ import (
 
 func CancelHandler(bot *telego.Bot, query telego.CallbackQuery) {
 	users := mongodb.GetUserCollection()
-	user, err := models.GetUserById(query.From.ID)
+	user, err := utils.GetUserByTgId(query.From.ID)
 	if err != nil {
 		log.Printf("Ошибка в EnterGroupNameHandler: %s\n", err)
 		return

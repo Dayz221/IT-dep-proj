@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"itproj/models"
+	"itproj/utils"
 	"log"
 
 	"github.com/mymmrac/telego"
@@ -11,7 +11,7 @@ import (
 func MessageHandler(bot *telego.Bot, message telego.Message) {
 	log.Println(message.Text)
 
-	user, err := models.GetUserById(message.From.ID)
+	user, err := utils.GetUserByTgId(message.From.ID)
 	if err != nil {
 		log.Printf("Ошибка в CreateGroupHandler: %s\n", err)
 	}

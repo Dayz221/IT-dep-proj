@@ -10,7 +10,7 @@ import (
 )
 
 func GetListOfGroups(userId int64) []models.Group {
-	user, err := models.GetUserById(userId)
+	user, err := GetUserByTgId(userId)
 	if err != nil {
 		log.Printf("Че та наебнулось к чертям в GetListOfGroups %s\n", err)
 		return []models.Group{}
@@ -30,7 +30,7 @@ func GetListOfGroups(userId int64) []models.Group {
 
 func GetListOfGroupsWithAdmin(userId int64) []models.Group {
 	listOfGroups := GetListOfGroups(userId)
-	user, err := models.GetUserById(userId)
+	user, err := GetUserByTgId(userId)
 	if err != nil {
 		log.Printf("Проеб в GetListOfGroupsWithAdmin %s\n ", err)
 		return []models.Group{}

@@ -21,8 +21,8 @@ func InviteUserHandler(bot *telego.Bot, query telego.CallbackQuery) {
 	bot.SendMessage(
 		tu.Message(
 			tu.ID(query.Message.GetChat().ID),
-			"Ты можешь пригласить команду по [этой ссылке](https://t.me/"+me.Username+"?start=invite="+group.ID.Hex()+")\\.",
-		).WithParseMode(telego.ModeMarkdownV2),
+			"Ты можешь пригласить команду по ссылке:\n`https://t.me/"+me.Username+"?start=invite="+group.ID.Hex()+"`",
+		).WithParseMode(telego.ModeMarkdown),
 	)
 
 	bot.AnswerCallbackQuery(&telego.AnswerCallbackQueryParams{
